@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experience Detail | Umair Folio</title>
+  <meta name="description" content="Detailed work experience of Muhammad Umair - Graphic Designer & IT Expert">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    :root {
+      --accent: #FF5500;
+      --accent-light: #FF772B;
+      --accent-glow: rgba(255,85,0,0.3);
+      --font: 'Poppins', sans-serif;
+    }
+
+    body.dark-mode {
+      --bg: #09090C;
+      --surface: #101015;
+      --card: #15151D;
+      --text: #F5F5F7;
+      --muted: #A1A1AA;
+      --border: rgba(255,255,255,0.08);
+      --canvas-line: rgba(255, 255, 255, 0.16);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    body.light-mode {
+      --bg: #F4F6F9;
+      --surface: #FFFFFF;
+      --card: #FFFFFF;
+      --text: #111118;
+      --muted: #4A4A5A;
+      --border: rgba(0, 0, 0, 0.09);
+      --canvas-line: rgba(0, 0, 0, 0.12);
+      --shadow: rgba(0, 0, 0, 0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--muted);
+      min-height: 100vh;
+      line-height: 1.7;
+      position: relative;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* 3D Wireframe Canvas Background */
+    #bg-canvas-3d {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Fixed Top Navigation Bar */
+    .nav-bar-top {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px;
+      z-index: 100;
+      pointer-events: auto;
+    }
+
+    .back-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(255,85,0,0.12);
+      border: 1px solid rgba(255,85,0,0.3);
+      color: var(--accent);
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 6px 24px var(--accent-glow);
+      transform: translateX(-3px);
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF6B00 0%, #FF3300 100%);
+      color: #FFFFFF;
+      font-size: 1.05rem;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 85, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .theme-toggle-btn:hover {
+      transform: scale(1.12) rotate(15deg);
+      box-shadow: 0 8px 25px rgba(255, 85, 0, 0.6);
+    }
+
+    /* Full Solid Black Intro Screen */
+    .intro-curtain {
+      position: fixed;
+      inset: 0;
+      background: #09090C;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    /* Part 1: Three Words Container (All White) */
+    .intro-words-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      color: #FFFFFF;
+      letter-spacing: -0.5px;
+    }
+
+    .word-item {
+      color: #FFFFFF !important;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .word-designer { font-weight: 300; } /* Poppins Light */
+    .word-creator  { font-weight: 500; } /* Poppins Medium / Regular (Not too bold) */
+    .word-leader   { font-weight: 300; } /* Poppins Light */
+
+    /* Part 2: Role Title Orange Box Reveal on Black Screen */
+    .black-screen-reveal-wrap {
+      position: absolute;
+      display: inline-block;
+      overflow: hidden;
+      opacity: 0;
+      text-align: center;
+      padding: 10px 20px;
+    }
+
+    .curtain-role-title {
+      font-family: var(--font);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 600; /* Semi Bold */
+      color: #FFFFFF;
+      white-space: nowrap;
+      opacity: 0; /* Revealed by orange mask */
+    }
+
+    .curtain-orange-mask {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: var(--accent);
+      z-index: 5;
+      transform-origin: left center;
+    }
+
+    /* Main Container */
+    .exp-main-container {
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 120px 30px 100px;
+    }
+
+    /* Hero Banner */
+    .exp-hero {
+      margin-bottom: 40px;
+    }
+
+    .exp-num-tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .exp-date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,85,0,0.1);
+      border: 1px solid rgba(255,85,0,0.25);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+    }
+
+    .exp-role-title {
+      font-family: var(--font);
+      font-size: clamp(2.2rem, 5.5vw, 3.4rem);
+      font-weight: 600; /* Semi Bold */
+      color: var(--text);
+      line-height: 1.15;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .exp-company-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .exp-company-title i { color: var(--accent); }
+
+    .exp-tagline-text {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 680px;
+      margin-bottom: 30px;
+      line-height: 1.7;
+    }
+
+    .section-divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      border-radius: 3px;
+      margin: 30px 0 45px;
+    }
+
+    /* Detail Content Sections */
+    .exp-detail-section {
+      margin-bottom: 45px;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .exp-section-header {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .exp-section-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .exp-paragraph {
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+
+    /* Key Responsibilities List */
+    .responsibilities-grid {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+    .responsibilities-grid li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.65;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      box-shadow: 0 4px 14px var(--shadow);
+      transition: all 0.3s ease;
+    }
+    .responsibilities-grid li:hover {
+      border-color: rgba(255,85,0,0.35);
+      transform: translateX(4px);
+    }
+    .responsibilities-grid li::before {
+      content: '✦';
+      color: var(--accent);
+      font-size: 0.75rem;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    /* Highlight & Note Boxes */
+    .highlight-card-box {
+      background: linear-gradient(135deg, rgba(255,85,0,0.08), rgba(255,51,0,0.03));
+      border: 1px solid rgba(255,85,0,0.25);
+      border-left: 4px solid var(--accent);
+      border-radius: 14px;
+      padding: 24px 28px;
+    }
+    .highlight-card-box p {
+      color: var(--text);
+      font-size: 0.98rem;
+      line-height: 1.75;
+    }
+
+    .note-card-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+    }
+    .note-card-box p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body class="dark-mode">
+
+  <!-- 3D Wireframe Canvas Background -->
+  <canvas id="bg-canvas-3d"></canvas>
+
+  <!-- Solid Black Intro Curtain Container -->
+  <div class="intro-curtain" id="intro-curtain">
+    
+    <!-- Part 1: Three Words (All White: Designer Light, Creator Medium, Leader Light) -->
+    <div class="intro-words-wrap" id="intro-words-wrap">
+      <span class="word-item word-designer" id="word-designer">Designer</span>
+      <span class="word-item word-creator" id="word-creator">Creator</span>
+      <span class="word-item word-leader" id="word-leader">Leader</span>
+    </div>
+
+    <!-- Part 2: Role Title Orange Box Reveal on Black Screen (Reference Photo 2) -->
+    <div class="black-screen-reveal-wrap" id="curtain-reveal-wrap">
+      <h2 class="curtain-role-title" id="curtain-role-title">Chief Operating Officer</h2>
+      <div class="curtain-orange-mask" id="curtain-orange-mask"></div>
+    </div>
+
+  </div>
+
+  <!-- Fixed Top Navigation Bar -->
+  <nav class="nav-bar-top">
+    <!-- Back to Portfolio button takes user back to exact #experience section in same tab -->
+    <a href="index.html#experience" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i> Back to Portfolio
+    </a>
+
+    <!-- Dark / Light Mode Toggle Button -->
+    <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light/Dark Mode" aria-label="Toggle Theme">
+      <i class="fa-solid fa-sun" id="theme-icon"></i>
+    </button>
+  </nav>
+
+  <!-- Main Experience Details Root Container -->
+  <main class="exp-main-container" id="exp-root"></main>
+
+  <script>
+    /* ========================================================================
+       1. DATA DEFINITIONS FOR ALL 6 EXPERIENCES
+       ======================================================================== */
+    const experiencesData = {
+      '1': {
+        num: '01',
+        date: '2024 – 2026 | 2 Years',
+        role: 'Chief Operating Officer (COO)',
+        company: 'Synergy Creativity Printing Solutions',
+        location: 'Dubai, UAE',
+        tagline: 'Managing business operations, teams, clients, projects, design workflows, and Dubai-Pakistan coordination.',
+        about: [
+          'My professional journey with Synergy Creativity Printing Solutions started as a Graphic Designer, where I was responsible for creating professional visual designs and promotional materials for the company\'s clients and marketing campaigns.',
+          'With my performance, dedication, and ability to manage multiple areas of the business, I was promoted to the position of Chief Operating Officer (COO). As COO, my role expanded beyond graphic design into business operations, team management, client coordination, project supervision, and workflow management.'
+        ],
+        highlights: [
+          'Started as a Graphic Designer and progressed to COO through performance and experience.',
+          'Managed day-to-day business operations and overall workflow.',
+          'Supervised design and production teams.',
+          'Managed client communication and project requirements.',
+          'Coordinated projects between the Dubai Head Office and the Punjab-based Sub Office.',
+          'Built and managed a professional remote team in Pakistan.',
+          'Recruited and supervised team members across different departments.',
+          'Managed project distribution, task assignments, and workflow.',
+          'Worked with clients on branding, printing, promotional materials, and creative design solutions.',
+          'Contributed to business development and operational planning.',
+          'Helped establish a structured working environment for the company\'s Pakistan-based operations.'
+        ],
+        careerHighlight: 'Started as a designer and successfully progressed to a senior leadership role, gaining valuable experience in Graphic Design, Operations Management, Team Leadership, Client Handling, and Business Development.',
+        reasonLeaving: 'The company had to discontinue its operations in Dubai due to licensing-related issues, which resulted in the closure of the business.'
+      },
+      '2': {
+        num: '02',
+        date: '2023 – 2025 | 2026 – Present',
+        role: 'ICT Incharge & Graphic Designer',
+        company: 'The Smart School',
+        location: 'Vehari Campus, Pakistan',
+        tagline: 'Managing IT infrastructure, social media, academic designs, schedules, results and communication.',
+        about: [
+          'I joined The Smart School as an ICT Incharge, responsible for managing the campus\'s technology, academic documentation, and digital systems. After gaining experience within the organization, my responsibilities expanded to include Graphic Design and Social Media Management.',
+          'I currently continue to contribute to the institution by managing its IT operations, academic workflow, digital communication, and creative requirements.'
+        ],
+        highlights: [
+          'Managed overall IT and technology-related operations of the campus.',
+          'Handled technical queries and provided IT support.',
+          'Managed academic schedules, timetables, examination materials, and related documentation.',
+          'Prepared and managed academic papers, results, and official documents.',
+          'Assisted in managing student and academic records.',
+          'Supported school administration with digital and technical solutions.',
+          'Managed communication with parents through digital platforms and WhatsApp.',
+          'Designed professional social media posts and promotional creatives.',
+          'Managed visual content for school events, announcements, admissions, and campaigns.',
+          'Assisted with the school\'s digital presence and social media communication.',
+          'Worked closely with administration and academic teams.'
+        ],
+        careerHighlight: 'Combined my expertise in IT, academic management, graphic design, and digital communication to contribute to the school\'s overall administrative and creative operations.',
+        reasonLeaving: null
+      },
+      '3': {
+        num: '03',
+        date: '2024 – 2025 | 2026 – Present',
+        role: 'MS Office Expert / Assistant Accountant',
+        company: 'Concordia College',
+        location: 'Vehari, Pakistan',
+        tagline: 'Managing Excel accounts, student records, vouchers, payments, expenses and college documentation.',
+        about: [
+          'Alongside my responsibilities at The Smart School, I also worked with Concordia College, where I was initially hired as an Assistant Accountant and handled a wide range of financial, administrative, and documentation-related tasks.',
+          'My role required strong expertise in Microsoft Excel, MS Office, data management, financial documentation, and academic records.'
+        ],
+        highlights: [
+          'Managed accounting-related data and financial records using Microsoft Excel.',
+          'Maintained daily income and expense sheets.',
+          'Managed student fee records and payment data.',
+          'Prepared and maintained payment vouchers.',
+          'Managed student records and administrative documentation.',
+          'Assisted in maintaining college financial records.',
+          'Prepared annual results and academic documentation.',
+          'Organized and maintained official college documents.',
+          'Managed data entry and record-keeping systems.',
+          'Used advanced MS Office and Excel skills for administrative operations.',
+          'Worked closely with the management and administrative team.'
+        ],
+        careerHighlight: 'Developed strong practical expertise in MS Office, Excel-based accounting, financial data management, student records, and institutional documentation, while simultaneously continuing my career in IT and Graphic Design.',
+        note: 'The Smart School and Concordia College were managed under the same ownership, allowing me to contribute to both institutions simultaneously in different professional capacities.',
+        reasonLeaving: null
+      },
+      '4': {
+        num: '04',
+        date: '2021 – Present',
+        role: 'Chief Executive Officer (CEO)',
+        company: 'Umair Graphics',
+        location: 'Vehari, Pakistan',
+        tagline: 'Managing business operations, clients, design projects, printing services, team and creative workflows.',
+        about: [
+          'Umair Graphics is my own creative and printing business, established in 2021 in Vehari. As the founder and CEO, I have been responsible for managing the business while also working hands-on as a Graphic Designer and Creative Professional.',
+          'The business has allowed me to gain practical experience in entrepreneurship, client management, printing, design, team coordination, and business operations.'
+        ],
+        highlights: [
+          'Founded and established Umair Graphics in 2021.',
+          'Currently serving as CEO.',
+          'Managed overall business operations and decision-making.',
+          'Worked directly with clients to understand their design and printing requirements.',
+          'Provided professional Graphic Design and Printing Solutions.',
+          'Managed client relationships and project delivery.',
+          'Handled branding, marketing, social media, and print design projects.',
+          'Managed day-to-day shop operations.',
+          'Supervised a small team and coordinated project assignments.',
+          'Worked as both a business owner and hands-on designer.',
+          'Managed production, customer dealing, and creative workflow.'
+        ],
+        careerHighlight: 'Built my own business from the ground up while developing real-world expertise in Entrepreneurship, Business Management, Graphic Design, Printing, Client Relations, and Team Leadership.',
+        note: 'Umair Graphics continues to operate in Vehari. My brother, Zubair Ali, currently serves as the Co-Founder and is involved in the day-to-day business operations. I continue to hold the position of CEO and retain overall ownership authority and decision-making power within the business.',
+        reasonLeaving: null
+      },
+      '5': {
+        num: '05',
+        date: 'Freelance Experience',
+        role: 'Freelance Graphic Designer',
+        company: 'Upwork & Fiverr',
+        location: 'International Platforms',
+        tagline: 'Delivering professional designs, managing 100+ clients, projects, revisions and international communication.',
+        about: [
+          'Before and alongside my professional career, I worked as a Freelance Graphic Designer on international freelancing platforms, including Upwork and Fiverr.',
+          'Through freelancing, I had the opportunity to work with clients from different backgrounds and industries, delivering creative solutions according to their individual requirements.'
+        ],
+        highlights: [
+          'Worked with 100+ clients on different design projects.',
+          'Created professional designs according to client requirements.',
+          'Managed client communication and project discussions.',
+          'Worked on branding, social media, marketing, and print design projects.',
+          'Delivered projects according to client specifications and deadlines.',
+          'Managed revisions and incorporated client feedback.',
+          'Built strong client relationships through professional communication.',
+          'Maintained a high level of client satisfaction.',
+          'Gained experience working with international clients and diverse design requirements.'
+        ],
+        careerHighlight: 'Successfully completed projects for 100+ clients, gaining valuable international experience in Client Communication, Remote Work, Project Management, and Professional Graphic Design.',
+        reasonLeaving: 'My freelancing career was interrupted after I lost access to my account credentials, including my ID and password, which resulted in me discontinuing my work on those platforms.'
+      },
+      '6': {
+        num: '06',
+        date: '2018 – 2020 | 3 Years',
+        role: 'Graphic Designer',
+        company: 'Al Mukhtar Press',
+        location: 'Vehari, Pakistan',
+        tagline: 'Creating print designs, mastering CorelDRAW, handling client requirements and developing professional design skills.',
+        about: [
+          'Al Mukhtar Press was the place where I began my professional journey as a Graphic Designer. I joined the company as a part-time designer while continuing my academic routine.',
+          'This experience became the foundation of my career and played a major role in transforming me from a beginner into a confident and experienced designer. During my time at Al Mukhtar Press, I developed strong practical skills in CorelDRAW and professional print design.'
+        ],
+        highlights: [
+          'Worked as a Part-Time Graphic Designer alongside my academic studies.',
+          'Created professional designs for printing and business requirements.',
+          'Developed practical expertise in CorelDRAW.',
+          'Worked on various print and graphic design projects.',
+          'Learned professional print production workflows.',
+          'Gained hands-on experience with real client requirements.',
+          'Developed an understanding of typography, layouts, colors, and print-ready artwork.',
+          'Improved design skills through practical day-to-day work.',
+          'Built the foundation for my professional career in Graphic Design.'
+        ],
+        careerHighlight: 'This was the beginning of my professional design journey. I entered Al Mukhtar Press as a beginner and spent three years learning, practicing, and developing my skills. It was here that I learned CorelDRAW and gained the practical experience that helped me grow into a professional Graphic Designer.',
+        note: 'Al Mukhtar Press is owned by my paternal uncle, and this connection gave me the opportunity to enter the professional design field at an early stage. However, through consistent work and practical experience, I developed my skills independently and progressed from a beginner to an experienced designer.',
+        reasonLeaving: null
+      }
+    };
+
+    /* ========================================================================
+       2. LIGHT / DARK MODE THEME TOGGLE
+       ======================================================================== */
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const themeIcon      = document.getElementById('theme-icon');
+
+    const savedTheme = localStorage.getItem('umair_folio_theme') || 'dark-mode';
+    if (savedTheme === 'light-mode') {
+      document.body.classList.remove('dark-mode');
+      document.body.classList.add('light-mode');
+      if (themeIcon) {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    } else {
+      if (themeIcon) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      }
+    }
+
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const isDark = document.body.classList.contains('dark-mode');
+        document.body.classList.toggle('dark-mode', !isDark);
+        document.body.classList.toggle('light-mode', isDark);
+
+        if (themeIcon) {
+          if (isDark) {
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+          } else {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+          }
+        }
+        localStorage.setItem('umair_folio_theme', isDark ? 'light-mode' : 'dark-mode');
+
+        gsap.fromTo(themeToggleBtn,
+          { scale: 0.8, rotate: -30 },
+          { scale: 1, rotate: 0, duration: 0.5, ease: 'elastic.out(1.5, 0.4)' }
+        );
+      });
+    }
+
+    /* ========================================================================
+       3. 3D WIREFRAME HEXAGON / POLYHEDRON CANVAS ANIMATION
+       ======================================================================== */
+    const canvas = document.getElementById('bg-canvas-3d');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+
+    let width, height;
+    let scrollScaleFactor = 1;
+
+    function resizeCanvas() {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const phi = (1 + Math.sqrt(5)) / 2;
+    const b = 1 / phi;
+
+    const vertices = [
+      [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+      [-1, -1, 1],  [1, -1, 1],  [1, 1, 1],  [-1, 1, 1],
+      [0, -b, -phi],[0, b, -phi], [0, -b, phi],[0, b, phi],
+      [-b, -phi, 0],[b, -phi, 0], [-b, phi, 0],[b, phi, 0],
+      [-phi, 0, -b],[phi, 0, -b], [-phi, 0, b],[phi, 0, b]
+    ];
+
+    const edges = [
+      [0,8],[8,1],[1,17],[17,9],[9,0],
+      [4,10],[10,5],[5,19],[19,11],[11,4],
+      [3,14],[14,2],[2,15],[15,3],
+      [7,11],[11,6],[6,15],[15,7],
+      [0,16],[16,3], [1,17],[2,17],
+      [4,18],[18,7], [5,19],[6,19],
+      [8,9], [10,11],[12,13],[14,15],[16,18],[17,19],
+      [0,12],[12,1],[4,12],[5,13],[13,1],
+      [3,14],[7,14],[2,15],[6,15]
+    ];
+
+    let angleX = 0, angleY = 0, angleZ = 0;
+
+    window.addEventListener('scroll', () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = Math.min(1, Math.max(0, window.scrollY / (maxScroll || 1)));
+      scrollScaleFactor = 1 + progress * 1.8;
+    });
+
+    function draw3DWireframe() {
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, width, height);
+
+      angleX += 0.003;
+      angleY += 0.005;
+      angleZ += 0.002;
+
+      const baseRadius = Math.min(width, height) * 0.35 * scrollScaleFactor;
+      const centerX = width * 0.75;
+      const centerY = height * 0.45;
+
+      const projected = vertices.map(v => {
+        let y1 = v[1] * Math.cos(angleX) - v[2] * Math.sin(angleX);
+        let z1 = v[1] * Math.sin(angleX) + v[2] * Math.cos(angleX);
+        let x1 = v[0];
+
+        let x2 = x1 * Math.cos(angleY) + z1 * Math.sin(angleY);
+        let z2 = -x1 * Math.sin(angleY) + z1 * Math.cos(angleY);
+        let y2 = y1;
+
+        let x3 = x2 * Math.cos(angleZ) - y2 * Math.sin(angleZ);
+        let y3 = x2 * Math.sin(angleZ) + y2 * Math.cos(angleZ);
+        let z3 = z2;
+
+        const fov = 400;
+        const scale = fov / (fov + z3 * 100);
+        return [
+          centerX + x3 * baseRadius * scale,
+          centerY + y3 * baseRadius * scale
+        ];
+      });
+
+      const isDark = document.body.classList.contains('dark-mode');
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.12)';
+      ctx.lineWidth = 1.4;
+
+      edges.forEach(edge => {
+        const p1 = projected[edge[0]];
+        const p2 = projected[edge[1]];
+        if (p1 && p2) {
+          ctx.beginPath();
+          ctx.moveTo(p1[0], p1[1]);
+          ctx.lineTo(p2[0], p2[1]);
+          ctx.stroke();
+        }
+      });
+
+      requestAnimationFrame(draw3DWireframe);
+    }
+    requestAnimationFrame(draw3DWireframe);
+
+    /* ========================================================================
+       4. RENDER EXPERIENCE DETAILS
+       ======================================================================== */
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function renderPage(id) {
+      const exp = experiencesData[id] || experiencesData['1'];
+      const root = document.getElementById('exp-root');
+      const curtainRoleEl = document.getElementById('curtain-role-title');
+
+      if (curtainRoleEl) curtainRoleEl.textContent = exp.role;
+
+      const aboutHTML = exp.about.map(p => `<p class="exp-paragraph">${p}</p>`).join('');
+      const listHTML  = exp.highlights.map(h => `<li>${h}</li>`).join('');
+
+      const leaveHTML = exp.reasonLeaving ? `
+        <div class="exp-detail-section" id="sec-leave">
+          <div class="exp-section-header"><i class="fa-solid fa-door-open"></i> Reason for Leaving</div>
+          <div class="note-card-box"><p>${exp.reasonLeaving}</p></div>
+        </div>` : '';
+
+      const noteHTML = exp.note ? `
+        <div class="exp-detail-section" id="sec-note">
+          <div class="exp-section-header"><i class="fa-solid fa-circle-info"></i> Additional Note</div>
+          <div class="note-card-box"><p>${exp.note}</p></div>
+        </div>` : '';
+
+      document.title = `${exp.role} | Umair Folio`;
+
+      root.innerHTML = `
+        <header class="exp-hero">
+          <span class="exp-num-tag">Experience ${exp.num}</span> <br>
+          <div class="exp-date-badge"><i class="fa-regular fa-calendar"></i> ${exp.date}</div>
+
+          <h1 class="exp-role-title">${exp.role}</h1>
+
+          <div class="exp-company-title"><i class="fa-solid fa-building"></i> ${exp.company} — ${exp.location}</div>
+          <p class="exp-tagline-text">${exp.tagline}</p>
+          <div class="section-divider"></div>
+        </header>
+
+        <section class="exp-detail-section" id="sec-about">
+          <div class="exp-section-header"><i class="fa-solid fa-user-tie"></i> About This Role</div>
+          ${aboutHTML}
+        </section>
+
+        <section class="exp-detail-section" id="sec-highlights">
+          <div class="exp-section-header"><i class="fa-solid fa-list-check"></i> Key Responsibilities & Highlights</div>
+          <ul class="responsibilities-grid">${listHTML}</ul>
+        </section>
+
+        <section class="exp-detail-section" id="sec-career">
+          <div class="exp-section-header"><i class="fa-solid fa-trophy"></i> Career Highlight</div>
+          <div class="highlight-card-box"><p>${exp.careerHighlight}</p></div>
+        </section>
+
+        ${leaveHTML}
+        ${noteHTML}
+      `;
+    }
+
+    /* ========================================================================
+       5. INTRO SEQUENCES ON SOLID BLACK CURTAIN SCREEN
+       Sequence: Part 1: Three Words -> Part 2: Orange Box Reveal on Black Screen -> Lift Curtain
+       ======================================================================== */
+    window.addEventListener('load', () => {
+      const expId = getParam('exp') || '1';
+      renderPage(expId);
+
+      const curtain     = document.getElementById('intro-curtain');
+      const wordsWrap   = document.getElementById('intro-words-wrap');
+      const wDesigner   = document.getElementById('word-designer');
+      const wCreator    = document.getElementById('word-creator');
+      const wLeader     = document.getElementById('word-leader');
+      const revealWrap  = document.getElementById('curtain-reveal-wrap');
+      const curtainRole = document.getElementById('curtain-role-title');
+      const orangeMask  = document.getElementById('curtain-orange-mask');
+
+      const masterTL = gsap.timeline();
+
+      // PART 1: Three Words on Solid Black Screen (All White)
+      masterTL
+        .to(wDesigner, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' })
+        .to(wCreator,  { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.22')
+        .to(wLeader,   { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.22')
+        .to(wordsWrap, { opacity: 0, y: -20, duration: 0.35, ease: 'power2.in', delay: 0.3 })
+
+        // PART 2: Orange Box Text Reveal Animation on Solid Black Screen (Reference Image 2)
+        .call(() => {
+          wordsWrap.style.display = 'none';
+          revealWrap.style.opacity = '1';
+          gsap.set(curtainRole, { opacity: 1 });
+        })
+        .fromTo(orangeMask,
+          { scaleX: 0, opacity: 1 },
+          { scaleX: 1, duration: 0.45, ease: 'power3.inOut' }
+        )
+        .to(orangeMask, {
+          scaleX: 0,
+          transformOrigin: 'right center',
+          duration: 0.55,
+          ease: 'power3.inOut'
+        })
+        .to(orangeMask, { opacity: 0, duration: 0.1 }, '+=0.2')
+
+        // PART 3: Curtain Lifts / Fades Out to reveal Experience Details page
+        .to(curtain, {
+          yPercent: -100,
+          duration: 0.75,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            curtain.style.display = 'none';
+          }
+        })
+
+        // Stagger detail page sections in
+        .to('.exp-detail-section', {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out'
+        }, '-=0.3');
+    });
+  </script>
+</body>
+</html>
