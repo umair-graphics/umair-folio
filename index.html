@@ -18,9 +18,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@600;700&family=Great+Vibes&family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- GSAP Animation Library -->
+  <!-- GSAP Animation Library & Lenis Smooth Scroll -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -229,83 +230,218 @@
     <!-- 02 SERVICES SECTION -->
     <section class="section services-section reveal-on-scroll" id="services">
       <div class="section-container">
-        <div class="section-header">
-          <span class="section-number">02</span>
-          <h2 class="section-title">Ser<span class="accent-text">vices</span></h2>
-          <p class="section-subtitle">High quality services to help brands grow and succeed in digital world.</p>
+        
+        <!-- Services Section Header matching Photo 2 -->
+        <div class="services-header-hero">
+          <h2 class="services-big-heading">
+            This is <span class="font-light">what</span><br>
+            we do <span class="font-light">best</span>
+          </h2>
+          <button class="our-services-scroll-btn" id="our-services-scroll-btn" aria-label="Scroll down to services list">
+            <span class="btn-text">OUR SERVICES</span>
+            <div class="circle-arrow-icon"><i class="fa-solid fa-arrow-down"></i></div>
+          </button>
         </div>
 
-        <div class="services-grid">
-          <div class="service-card">
-            <div class="service-icon-box">
-              <i class="fa-solid fa-layer-group"></i>
-            </div>
-            <h3 class="service-title">Branding & Identity</h3>
-            <p class="service-desc">Complete brand guidelines, logos, visual style guides, color palettes and business stationery.</p>
+        <!-- Services Section Body: Left Wireframe Graphic + Right 8-Services Grid -->
+        <div class="services-agency-layout">
+          
+          <!-- Left Column: Geometric Wireframe Graphic (matching Photo 2) -->
+          <div class="services-left-wireframe" aria-hidden="true">
+            <svg class="wireframe-svg" viewBox="0 0 160 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="1" width="158" height="798" stroke="currentColor" stroke-opacity="0.12" stroke-width="1.5"/>
+              <line x1="80" y1="0" x2="80" y2="800" stroke="currentColor" stroke-opacity="0.12" stroke-width="1.5"/>
+              <line x1="0" y1="200" x2="160" y2="200" stroke="currentColor" stroke-opacity="0.12" stroke-width="1.5"/>
+              <line x1="0" y1="400" x2="160" y2="400" stroke="currentColor" stroke-opacity="0.12" stroke-width="1.5"/>
+              <line x1="0" y1="600" x2="160" y2="600" stroke="currentColor" stroke-opacity="0.12" stroke-width="1.5"/>
+              <path d="M 0 200 A 80 80 0 0 0 160 200" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5" fill="none"/>
+              <circle cx="80" cy="300" r="80" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5" fill="none"/>
+              <circle cx="80" cy="500" r="80" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5" fill="none"/>
+              <circle cx="80" cy="700" r="80" stroke="currentColor" stroke-opacity="0.15" stroke-width="1.5" fill="none"/>
+            </svg>
           </div>
 
-          <div class="service-card">
-            <div class="service-icon-box">
-              <i class="fa-solid fa-print"></i>
-            </div>
-            <h3 class="service-title">Print Design</h3>
-            <p class="service-desc">Flyers, brochures, business cards, banners, billboards, and high-quality print collateral.</p>
-          </div>
+          <!-- Right Showcase Grid: 8 Services in 2-Column Minimalist Layout (Photo 2) -->
+          <div class="services-showcase-grid" id="services-grid">
 
-          <div class="service-card">
-            <div class="service-icon-box">
-              <i class="fa-solid fa-border-all"></i>
-            </div>
-            <h3 class="service-title">Social Media Design</h3>
-            <p class="service-desc">Engaging social media posts, stories, covers, ad banners, and promotional campaign artwork.</p>
-          </div>
+            <!-- Service 01: Branding -->
+            <a href="service-detail.html?service=1" class="service-card-block" data-more-cursor="true">
+              <div class="service-card-content">
+                <h3 class="service-card-title">
+                  Branding and<br><span class="font-light">Identity Design</span>
+                </h3>
+                <p class="service-card-desc">
+                  Complete brand guidelines, logos, visual style guides, color palettes, and business stationery tailored to elevate your business.
+                </p>
+                <div class="service-subitems-preview">
+                  <div class="subitem-row">LOGO DESIGN &amp; SYMBOLS</div>
+                  <div class="subitem-row">BRAND STYLE GUIDELINES</div>
+                  <div class="subitem-row">COLOR PALETTES &amp; TYPOGRAPHY</div>
+                </div>
+                <div class="read-more-btn">
+                  <span>READ MORE</span>
+                  <div class="mini-circle-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>
 
-          <div class="service-card">
-            <div class="service-icon-box">
-              <i class="fa-solid fa-vector-square"></i>
-            </div>
-            <h3 class="service-title">UI/UX Design</h3>
-            <p class="service-desc">User-friendly website layouts, modern app interfaces, wireframes, and interactive prototypes.</p>
-          </div>
+            <!-- Service 02: Print Design -->
+            <a href="service-detail.html?service=2" class="service-card-block" data-more-cursor="true">
+              <div class="service-card-content">
+                <h3 class="service-card-title">
+                  Print Design<br><span class="font-light">and Collateral</span>
+                </h3>
+                <p class="service-card-desc">
+                  High-quality flyers, brochures, catalogs, business cards, flex banners, billboards, and pre-press print production artwork.
+                </p>
+                <div class="service-subitems-preview">
+                  <div class="subitem-row">BROCHURES &amp; CATALOGS</div>
+                  <div class="subitem-row">FLEX &amp; LARGE FORMAT PRINT</div>
+                  <div class="subitem-row">PACKAGING &amp; LABELS</div>
+                </div>
+                <div class="read-more-btn">
+                  <span>READ MORE</span>
+                  <div class="mini-circle-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>
 
-          <div class="service-card">
-            <div class="service-icon-box">
-              <i class="fa-solid fa-display"></i>
-            </div>
-            <h3 class="service-title">IT Services</h3>
-            <p class="service-desc">System configuration, network management, software setup, IT infrastructure, and technical consulting.</p>
-          </div>
+            <!-- Service 03: Social Media Design -->
+            <a href="service-detail.html?service=3" class="service-card-block" data-more-cursor="true">
+              <div class="service-card-content">
+                <h3 class="service-card-title">
+                  Social Media<br><span class="font-light">Design &amp; Marketing</span>
+                </h3>
+                <p class="service-card-desc">
+                  Engaging social media posts, story templates, cover banners, promotional campaign artwork, and high-converting ad kits.
+                </p>
+                <div class="service-subitems-preview">
+                  <div class="subitem-row">POSTS &amp; STORY TEMPLATES</div>
+                  <div class="subitem-row">PROMOTIONAL CAMPAIGN ARTWORK</div>
+                  <div class="subitem-row">DIGITAL AD KITS &amp; BANNERS</div>
+                </div>
+                <div class="read-more-btn">
+                  <span>READ MORE</span>
+                  <div class="mini-circle-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>
 
-          <div class="service-card">
-            <div class="service-icon-box">
-              <i class="fa-solid fa-code"></i>
-            </div>
-            <h3 class="service-title">Web Development</h3>
-            <p class="service-desc">Responsive, fast-loading portfolio sites, landing pages, business websites, and CMS setup.</p>
-          </div>
+            <!-- Service 04: UI/UX Design -->
+            <a href="service-detail.html?service=4" class="service-card-block" data-more-cursor="true">
+              <div class="service-card-content">
+                <h3 class="service-card-title">
+                  UI / UX<br><span class="font-light">Interface Design</span>
+                </h3>
+                <p class="service-card-desc">
+                  User-friendly website layouts, modern app visual interfaces, interactive Figma wireframes, and digital product prototypes.
+                </p>
+                <div class="service-subitems-preview">
+                  <div class="subitem-row">UI / UX WIREFRAMING</div>
+                  <div class="subitem-row">FIGMA PROTOTYPING</div>
+                  <div class="subitem-row">APP &amp; WEB INTERFACES</div>
+                </div>
+                <div class="read-more-btn">
+                  <span>READ MORE</span>
+                  <div class="mini-circle-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>
 
-          <div class="service-card">
-            <div class="service-icon-box">
-              <i class="fa-solid fa-mobile-screen-button"></i>
-            </div>
-            <h3 class="service-title">App Design</h3>
-            <p class="service-desc">Clean, sleek iOS and Android app visual interfaces designed for intuitive user experience.</p>
-          </div>
+            <!-- Service 05: IT Services -->
+            <a href="service-detail.html?service=5" class="service-card-block" data-more-cursor="true">
+              <div class="service-card-content">
+                <h3 class="service-card-title">
+                  IT Services &amp;<br><span class="font-light">Infrastructure Setup</span>
+                </h3>
+                <p class="service-card-desc">
+                  System configuration, campus network management, hardware maintenance, software setups, and institutional IT systems.
+                </p>
+                <div class="service-subitems-preview">
+                  <div class="subitem-row">NETWORK &amp; HARDWARE SETUP</div>
+                  <div class="subitem-row">INSTITUTIONAL IT SYSTEMS</div>
+                  <div class="subitem-row">SOFTWARE &amp; SECURITY SETUP</div>
+                </div>
+                <div class="read-more-btn">
+                  <span>READ MORE</span>
+                  <div class="mini-circle-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>
 
-          <div class="service-card">
-            <div class="service-icon-box">
-              <i class="fa-solid fa-user-gear"></i>
-            </div>
-            <h3 class="service-title">Tech Support</h3>
-            <p class="service-desc">Troubleshooting, system maintenance, data backup, security optimization, and continuous support.</p>
+            <!-- Service 06: Web Development -->
+            <a href="service-detail.html?service=6" class="service-card-block" data-more-cursor="true">
+              <div class="service-card-content">
+                <h3 class="service-card-title">
+                  Web Development<br><span class="font-light">and Launch</span>
+                </h3>
+                <p class="service-card-desc">
+                  Responsive, fast-loading portfolio sites, business websites, landing pages, CMS setup, and modern web applications.
+                </p>
+                <div class="service-subitems-preview">
+                  <div class="subitem-row">RESPONSIVE LANDING PAGES</div>
+                  <div class="subitem-row">PORTFOLIO &amp; BUSINESS SITES</div>
+                  <div class="subitem-row">CMS &amp; WEB INTEGRATION</div>
+                </div>
+                <div class="read-more-btn">
+                  <span>READ MORE</span>
+                  <div class="mini-circle-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>
+
+            <!-- Service 07: MS Office Expertise (Replaces App Design) -->
+            <a href="service-detail.html?service=7" class="service-card-block" data-more-cursor="true">
+              <div class="service-card-content">
+                <h3 class="service-card-title">
+                  MS Office Expertise<br><span class="font-light">&amp; Automation</span>
+                </h3>
+                <p class="service-card-desc">
+                  Advanced Excel spreadsheets, data management, automated financial records, fee vouchers, formulas, and report systems.
+                </p>
+                <div class="service-subitems-preview">
+                  <div class="subitem-row">EXCEL ADVANCED FORMULAS</div>
+                  <div class="subitem-row">FEE VOUCHERS &amp; SALARY SHEETS</div>
+                  <div class="subitem-row">DATA MANAGEMENT SYSTEMS</div>
+                </div>
+                <div class="read-more-btn">
+                  <span>READ MORE</span>
+                  <div class="mini-circle-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>
+
+            <!-- Service 08: Tech Support -->
+            <a href="service-detail.html?service=8" class="service-card-block" data-more-cursor="true">
+              <div class="service-card-content">
+                <h3 class="service-card-title">
+                  Tech Support<br><span class="font-light">&amp; Maintenance</span>
+                </h3>
+                <p class="service-card-desc">
+                  System troubleshooting, IT maintenance, data backup solutions, security optimization, and continuous technical support.
+                </p>
+                <div class="service-subitems-preview">
+                  <div class="subitem-row">SYSTEM TROUBLESHOOTING</div>
+                  <div class="subitem-row">DATA BACKUP &amp; RECOVERY</div>
+                  <div class="subitem-row">CONTINUOUS TECH SUPPORT</div>
+                </div>
+                <div class="read-more-btn">
+                  <span>READ MORE</span>
+                  <div class="mini-circle-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </a>
+
           </div>
         </div>
 
-        <div class="section-footer-link">
-          <a href="#contact" class="link-arrow">View All Services <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
       </div>
     </section>
+
+    <!-- Custom "MORE" Circular Hover Cursor Follower -->
+    <div class="more-cursor-follower" id="more-cursor">
+      <span>MORE</span>
+    </div>
 
     <!-- 03 MY WORK SECTION -->
     <section class="section work-section reveal-on-scroll" id="work">
@@ -431,107 +567,178 @@
       </div>
     </section>
 
-    <!-- 04 EXPERIENCE SECTION -->
+    <!-- 04 CREATIVE JOURNEY (EXPERIENCE) SECTION -->
     <section class="section experience-section reveal-on-scroll" id="experience">
       <div class="section-container">
-        <div class="section-header">
-          <span class="section-number">04</span>
-          <h2 class="section-title">My <span class="accent-text">Experience</span></h2>
+        
+        <!-- Section 04 Label Above Hero Box -->
+        <div style="text-align:center; margin-bottom: 24px;">
+          <span class="section-number" style="display:inline-block;">04</span>
         </div>
 
-        <div class="exp-cards-grid">
+        <!-- Hero Header Box with Rounded Orange Glass Accent -->
+        <div class="creative-journey-hero-box">
+          <span class="journey-sublabel">EXPERIENCE DETAILS</span>
+          <h2 class="journey-title">My <span class="accent-text">Creative Journey</span></h2>
+          <p class="journey-desc">6+ Years of Leadership, IT Management &amp; Visual Branding Solutions</p>
+          <button class="see-what-built-btn" id="see-built-btn" aria-label="Scroll down to timeline">
+            <span>See What I've Built</span>
+            <div class="circle-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+          </button>
+        </div>
 
-          <!-- Experience 01 -->
-          <div class="exp-card timeline-item">
-            <div class="exp-card-top">
-              <span class="exp-year">2024 – 2026 | 2 Years</span>
-              <span class="exp-badge">Dubai, UAE</span>
+        <!-- Alternating Zig-Zag Timeline Container (hidden by default) -->
+        <div class="journey-timeline-container" id="journey-timeline" style="display:none; overflow:hidden;">
+          
+          <!-- Timeline Vertical Connecting Line -->
+          <div class="timeline-center-line"></div>
+
+          <!-- Step 01 (Left Column) -->
+          <div class="journey-item step-left timeline-item">
+            <div class="journey-step-num">01</div>
+            <div class="exp-card journey-card">
+              <div class="exp-card-top">
+                <span class="exp-year">2024 – 2026 | 2 Years</span>
+                <span class="exp-badge">Dubai, UAE</span>
+              </div>
+              <h3 class="exp-role">Chief Operating Officer (COO)</h3>
+              <div class="exp-company"><i class="fa-solid fa-building"></i> Synergy Creativity Printing Solutions</div>
+              <p class="exp-desc">Managing business operations, teams, clients, projects, design workflows, and Dubai-Pakistan coordination.</p>
+              <div class="drag-to-unlock-wrapper" data-href="experience-detail.html?exp=1">
+                <div class="drag-slider-track">
+                  <div class="drag-progress-bar"></div>
+                  <span class="drag-slider-label">Drag to view details <i class="fa-solid fa-arrow-right"></i></span>
+                  <div class="drag-slider-knob">
+                    <i class="fa-solid fa-angles-right"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 class="exp-role">Chief Operating Officer (COO)</h3>
-            <div class="exp-company"><i class="fa-solid fa-building"></i> Synergy Creativity Printing Solutions</div>
-            <p class="exp-desc">Managing business operations, teams, clients, projects, design workflows, and Dubai-Pakistan coordination.</p>
-            <a href="experience-detail.html?exp=1" class="exp-view-btn">
-              View Details <i class="fa-solid fa-arrow-right"></i>
-            </a>
           </div>
 
-          <!-- Experience 02 -->
-          <div class="exp-card timeline-item">
-            <div class="exp-card-top">
-              <span class="exp-year">2023 – Present</span>
-              <span class="exp-badge">Vehari, Pakistan</span>
+          <!-- Step 02 (Right Column) -->
+          <div class="journey-item step-right timeline-item">
+            <div class="journey-step-num">02</div>
+            <div class="exp-card journey-card">
+              <div class="exp-card-top">
+                <span class="exp-year">2023 – Present</span>
+                <span class="exp-badge">Vehari, Pakistan</span>
+              </div>
+              <h3 class="exp-role">ICT Incharge &amp; Graphic Designer</h3>
+              <div class="exp-company"><i class="fa-solid fa-school"></i> The Smart School — Vehari Campus</div>
+              <p class="exp-desc">Managing IT infrastructure, social media, academic designs, schedules, results and communication.</p>
+              <div class="drag-to-unlock-wrapper" data-href="experience-detail.html?exp=2">
+                <div class="drag-slider-track">
+                  <div class="drag-progress-bar"></div>
+                  <span class="drag-slider-label">Drag to view details <i class="fa-solid fa-arrow-right"></i></span>
+                  <div class="drag-slider-knob">
+                    <i class="fa-solid fa-angles-right"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 class="exp-role">ICT Incharge & Graphic Designer</h3>
-            <div class="exp-company"><i class="fa-solid fa-school"></i> The Smart School — Vehari Campus</div>
-            <p class="exp-desc">Managing IT infrastructure, social media, academic designs, schedules, results and communication.</p>
-            <a href="experience-detail.html?exp=2" class="exp-view-btn">
-              View Details <i class="fa-solid fa-arrow-right"></i>
-            </a>
           </div>
 
-          <!-- Experience 03 -->
-          <div class="exp-card timeline-item">
-            <div class="exp-card-top">
-              <span class="exp-year">2024 – Present</span>
-              <span class="exp-badge">Vehari, Pakistan</span>
+          <!-- Step 03 (Left Column) -->
+          <div class="journey-item step-left timeline-item">
+            <div class="journey-step-num">03</div>
+            <div class="exp-card journey-card">
+              <div class="exp-card-top">
+                <span class="exp-year">2024 – Present</span>
+                <span class="exp-badge">Vehari, Pakistan</span>
+              </div>
+              <h3 class="exp-role">MS Office Expert / Assistant Accountant</h3>
+              <div class="exp-company"><i class="fa-solid fa-graduation-cap"></i> Concordia College</div>
+              <p class="exp-desc">Managing Excel accounts, student records, vouchers, payments, expenses and college documentation.</p>
+              <div class="drag-to-unlock-wrapper" data-href="experience-detail.html?exp=3">
+                <div class="drag-slider-track">
+                  <div class="drag-progress-bar"></div>
+                  <span class="drag-slider-label">Drag to view details <i class="fa-solid fa-arrow-right"></i></span>
+                  <div class="drag-slider-knob">
+                    <i class="fa-solid fa-angles-right"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 class="exp-role">MS Office Expert / Assistant Accountant</h3>
-            <div class="exp-company"><i class="fa-solid fa-graduation-cap"></i> Concordia College</div>
-            <p class="exp-desc">Managing Excel accounts, student records, vouchers, payments, expenses and college documentation.</p>
-            <a href="experience-detail.html?exp=3" class="exp-view-btn">
-              View Details <i class="fa-solid fa-arrow-right"></i>
-            </a>
           </div>
 
-          <!-- Experience 04 -->
-          <div class="exp-card timeline-item">
-            <div class="exp-card-top">
-              <span class="exp-year">2021 – Present</span>
-              <span class="exp-badge">Founder & CEO</span>
+          <!-- Step 04 (Right Column) -->
+          <div class="journey-item step-right timeline-item">
+            <div class="journey-step-num">04</div>
+            <div class="exp-card journey-card">
+              <div class="exp-card-top">
+                <span class="exp-year">2021 – Present</span>
+                <span class="exp-badge">Founder &amp; CEO</span>
+              </div>
+              <h3 class="exp-role">Chief Executive Officer (CEO)</h3>
+              <div class="exp-company"><i class="fa-solid fa-store"></i> Umair Graphics — Vehari</div>
+              <p class="exp-desc">Managing business operations, clients, design projects, printing services, team and creative workflows.</p>
+              <div class="drag-to-unlock-wrapper" data-href="experience-detail.html?exp=4">
+                <div class="drag-slider-track">
+                  <div class="drag-progress-bar"></div>
+                  <span class="drag-slider-label">Drag to view details <i class="fa-solid fa-arrow-right"></i></span>
+                  <div class="drag-slider-knob">
+                    <i class="fa-solid fa-angles-right"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 class="exp-role">Chief Executive Officer (CEO)</h3>
-            <div class="exp-company"><i class="fa-solid fa-store"></i> Umair Graphics — Vehari</div>
-            <p class="exp-desc">Managing business operations, clients, design projects, printing services, team and creative workflows.</p>
-            <a href="experience-detail.html?exp=4" class="exp-view-btn">
-              View Details <i class="fa-solid fa-arrow-right"></i>
-            </a>
           </div>
 
-          <!-- Experience 05 -->
-          <div class="exp-card timeline-item">
-            <div class="exp-card-top">
-              <span class="exp-year">Freelance Experience</span>
-              <span class="exp-badge">100+ Clients</span>
+          <!-- Step 05 (Left Column) -->
+          <div class="journey-item step-left timeline-item">
+            <div class="journey-step-num">05</div>
+            <div class="exp-card journey-card">
+              <div class="exp-card-top">
+                <span class="exp-year">Freelance Experience</span>
+                <span class="exp-badge">100+ Clients</span>
+              </div>
+              <h3 class="exp-role">Freelance Graphic Designer</h3>
+              <div class="exp-company"><i class="fa-solid fa-globe"></i> Upwork &amp; Fiverr — International</div>
+              <p class="exp-desc">Delivering professional designs, managing 100+ clients, projects, revisions and international communication.</p>
+              <div class="drag-to-unlock-wrapper" data-href="experience-detail.html?exp=5">
+                <div class="drag-slider-track">
+                  <div class="drag-progress-bar"></div>
+                  <span class="drag-slider-label">Drag to view details <i class="fa-solid fa-arrow-right"></i></span>
+                  <div class="drag-slider-knob">
+                    <i class="fa-solid fa-angles-right"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 class="exp-role">Freelance Graphic Designer</h3>
-            <div class="exp-company"><i class="fa-solid fa-globe"></i> Upwork & Fiverr — International</div>
-            <p class="exp-desc">Delivering professional designs, managing 100+ clients, projects, revisions and international communication.</p>
-            <a href="experience-detail.html?exp=5" class="exp-view-btn">
-              View Details <i class="fa-solid fa-arrow-right"></i>
-            </a>
           </div>
 
-          <!-- Experience 06 -->
-          <div class="exp-card timeline-item">
-            <div class="exp-card-top">
-              <span class="exp-year">2018 – 2020 | 3 Years</span>
-              <span class="exp-badge">Career Start</span>
+          <!-- Step 06 (Right Column) -->
+          <div class="journey-item step-right timeline-item">
+            <div class="journey-step-num">06</div>
+            <div class="exp-card journey-card">
+              <div class="exp-card-top">
+                <span class="exp-year">2018 – 2020 | 3 Years</span>
+                <span class="exp-badge">Career Start</span>
+              </div>
+              <h3 class="exp-role">Graphic Designer</h3>
+              <div class="exp-company"><i class="fa-solid fa-print"></i> Al Mukhtar Press — Vehari</div>
+              <p class="exp-desc">Creating print designs, mastering CorelDRAW, handling client requirements and developing professional design skills.</p>
+              <div class="drag-to-unlock-wrapper" data-href="experience-detail.html?exp=6">
+                <div class="drag-slider-track">
+                  <div class="drag-progress-bar"></div>
+                  <span class="drag-slider-label">Drag to view details <i class="fa-solid fa-arrow-right"></i></span>
+                  <div class="drag-slider-knob">
+                    <i class="fa-solid fa-angles-right"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <h3 class="exp-role">Graphic Designer</h3>
-            <div class="exp-company"><i class="fa-solid fa-print"></i> Al Mukhtar Press — Vehari</div>
-            <p class="exp-desc">Creating print designs, mastering CorelDRAW, handling client requirements and developing professional design skills.</p>
-            <a href="experience-detail.html?exp=6" class="exp-view-btn">
-              View Details <i class="fa-solid fa-arrow-right"></i>
-            </a>
           </div>
 
         </div>
 
         <div class="experience-badge-wrapper">
           <div class="badge-pill">
-            <span class="accent-text fw-700">6+</span> Years of Experience
+            <span class="accent-text fw-700">6+</span> Years of Proven Creative Excellence
           </div>
         </div>
+
       </div>
     </section>
 
@@ -741,6 +948,18 @@
     <i class="fa-solid fa-circle-check"></i>
     <span id="toast-message">Message sent successfully!</span>
   </div>
+
+  <!-- Failsafe: force hide loader after 4s if JS crashes -->
+  <script>
+    setTimeout(function() {
+      var loader = document.getElementById('page-loader');
+      if (loader && loader.style.display !== 'none') {
+        loader.style.transition = 'opacity 0.6s ease';
+        loader.style.opacity = '0';
+        setTimeout(function() { loader.style.display = 'none'; }, 650);
+      }
+    }, 4000);
+  </script>
 
   <!-- Main JavaScript -->
   <script src="script.js"></script>

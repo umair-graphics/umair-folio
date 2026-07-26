@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Detail — Muhammad Umair Portfolio</title>
+  <meta name="description" content="Detailed breakdown of design and IT services offered by Muhammad Umair — Graphic Designer & IT Expert.">
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    /* ===================================================
+       CSS VARIABLES — matched to portfolio dark theme
+    =================================================== */
+    :root {
+      --bg-main: #0d0d0d;
+      --bg-card: #161616;
+      --bg-surface: #1a1a1a;
+      --text-heading: #f0f0f0;
+      --text-body: #a0a0a0;
+      --text-muted: #606060;
+      --accent-orange: #FF5500;
+      --accent-orange-glow: rgba(255, 85, 0, 0.3);
+      --border-light: rgba(255,255,255,0.07);
+      --border-accent: rgba(255, 85, 0, 0.4);
+      --font-main: 'Poppins', sans-serif;
+      --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    body.light-mode {
+      --bg-main: #f5f5f5;
+      --bg-card: #ffffff;
+      --bg-surface: #eeeeee;
+      --text-heading: #111111;
+      --text-body: #555555;
+      --text-muted: #999999;
+      --border-light: rgba(0,0,0,0.08);
+      --border-accent: rgba(255, 85, 0, 0.4);
+    }
+
+    /* ===================================================
+       BASE RESET
+    =================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-main);
+      color: var(--text-heading);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+      position: relative;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ===================================================
+       FULL SOLID BLACK INTRO CURTAIN SCREEN
+    =================================================== */
+    .intro-curtain {
+      position: fixed;
+      inset: 0;
+      background: #09090C;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    /* Part 1: Three Words Container (All White) */
+    .intro-words-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: clamp(1.4rem, 3.5vw, 2.5rem);
+      color: #FFFFFF;
+      letter-spacing: -0.5px;
+    }
+
+    .word-item {
+      color: #FFFFFF !important;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .word-designer { font-weight: 300; }
+    .word-creator  { font-weight: 500; color: var(--accent-orange) !important; }
+    .word-leader   { font-weight: 300; }
+
+    /* Part 2: Service Title Orange Box Reveal on Black Screen */
+    .black-screen-reveal-wrap {
+      position: absolute;
+      display: inline-block;
+      overflow: hidden;
+      opacity: 0;
+      text-align: center;
+      padding: 10px 20px;
+    }
+
+    .curtain-role-title {
+      font-family: var(--font-main);
+      font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+      font-weight: 500;
+      color: #FFFFFF;
+      white-space: nowrap;
+      opacity: 0;
+    }
+
+    .curtain-orange-mask {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: var(--accent-orange);
+      z-index: 5;
+      transform-origin: left center;
+    }
+
+    /* ===================================================
+       3D WIREFRAME CANVASES
+    =================================================== */
+    #bg-canvas-3d {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.28;
+    }
+
+    /* ===================================================
+       TOP NAV BAR
+    =================================================== */
+    .sd-navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 50px;
+      background: rgba(13,13,13,0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    body.light-mode .sd-navbar {
+      background: rgba(245,245,245,0.85);
+    }
+
+    .sd-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .sd-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-body);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: color var(--transition);
+      padding: 0;
+    }
+
+    .sd-back-btn:hover { color: var(--accent-orange); }
+
+    .sd-back-btn .back-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      transition: all var(--transition);
+    }
+
+    .sd-back-btn:hover .back-circle {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #fff;
+    }
+
+    .sd-nav-logo {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-heading);
+      letter-spacing: -0.5px;
+    }
+
+    .sd-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Theme toggle */
+    .sd-theme-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-light);
+      background: transparent;
+      color: var(--text-body);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .sd-theme-toggle:hover {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #fff;
+    }
+
+    /* ===================================================
+       HERO — Compact Service Heading (60% smaller)
+    =================================================== */
+    .sd-hero {
+      position: relative;
+      z-index: 10;
+      padding: 120px 50px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .sd-service-big-title {
+      font-family: var(--font-main);
+      font-size: clamp(1.2rem, 2.4vw, 1.85rem); /* 60% smaller compact heading */
+      font-weight: 600;
+      color: var(--text-heading);
+      line-height: 1.3;
+      letter-spacing: -0.3px;
+      margin-bottom: 25px;
+      max-width: 650px;
+    }
+
+    .sd-service-big-title .font-light {
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+
+    /* ABOUT SERVICE scroll button */
+    .sd-about-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 40px;
+    }
+
+    .sd-about-btn .btn-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .sd-about-btn .circle-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border-light);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      transition: all var(--transition);
+    }
+
+    .sd-about-btn:hover .circle-btn {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #fff;
+      transform: translateY(3px);
+    }
+
+    /* ===================================================
+       MAIN CONTENT — 2-column layout (Photo 2/3 style)
+    =================================================== */
+    .sd-main-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 50px 100px;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    /* LEFT COL — Approach & Description */
+    .sd-left-col {
+      position: sticky;
+      top: 110px;
+    }
+
+    .sd-approach-label {
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      font-weight: 600;
+      color: var(--text-heading);
+      line-height: 1.35;
+      margin-bottom: 16px;
+    }
+
+    .sd-approach-label .font-light {
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+
+    .sd-approach-desc {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      line-height: 1.75;
+      margin-bottom: 30px;
+      opacity: 0.88;
+    }
+
+    /* VIEW WORKS button */
+    .sd-view-works-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .sd-view-works-btn .btn-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-body);
+      text-transform: uppercase;
+      transition: color var(--transition);
+    }
+
+    .sd-view-works-btn .circle-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border-light);
+      color: var(--text-body);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: all var(--transition);
+    }
+
+    .sd-view-works-btn:hover .btn-label { color: var(--accent-orange); }
+
+    .sd-view-works-btn:hover .circle-btn {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #fff;
+      transform: translateX(4px);
+    }
+
+    /* ===================================================
+       RIGHT COL — Accordion Sub-services (Photo 2/3)
+    =================================================== */
+    .sd-accordion {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sd-accordion-item {
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .sd-accordion-item:first-child {
+      border-top: 1px solid var(--border-light);
+    }
+
+    .sd-accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      cursor: pointer;
+      transition: all var(--transition);
+      user-select: none;
+    }
+
+    .sd-accordion-header:hover .acc-title {
+      color: var(--text-heading);
+    }
+
+    .acc-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color var(--transition);
+    }
+
+    .acc-toggle-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid var(--border-light);
+      background: transparent;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 300;
+      transition: all var(--transition);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* Active/open state — orange circle with minus */
+    .sd-accordion-item.active .acc-toggle-btn {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: #fff;
+    }
+
+    .sd-accordion-item.active .acc-title {
+      color: var(--text-heading);
+    }
+
+    /* Accordion body */
+    .sd-accordion-body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  opacity 0.35s ease,
+                  padding 0.35s ease;
+      opacity: 0;
+      padding: 0 0 0;
+    }
+
+    .sd-accordion-item.active .sd-accordion-body {
+      max-height: 600px;
+      opacity: 1;
+      padding: 0 0 24px;
+    }
+
+    .sd-accordion-body p {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+
+    .sd-accordion-body p:last-child { margin-bottom: 0; }
+
+    /* ===================================================
+       VERTICAL SIDE LABEL ("SERVICES" text)
+    =================================================== */
+    .sd-side-label {
+      position: fixed;
+      left: 18px;
+      bottom: 50%;
+      transform: translateY(50%) rotate(-90deg);
+      transform-origin: center center;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0.6;
+    }
+
+    /* ===================================================
+       RESPONSIVE
+    =================================================== */
+    @media (max-width: 900px) {
+      .sd-hero { padding: 110px 24px 30px; }
+      .sd-main-content {
+        padding: 0 24px 60px;
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .sd-left-col { position: static; }
+      .sd-navbar { padding: 16px 20px; }
+      .sd-service-big-title { font-size: 1.3rem; }
+      .sd-side-label { display: none; }
+    }
+  </style>
+</head>
+<body class="dark-mode">
+
+  <!-- Full Solid Black Intro Curtain Screen -->
+  <div class="intro-curtain" id="intro-curtain">
+    <!-- Part 1: Three Words Container -->
+    <div class="intro-words-wrap" id="intro-words-wrap">
+      <span class="word-item word-designer" id="word-designer">CREATIVE</span>
+      <span class="word-item word-creator" id="word-creator">✦</span>
+      <span class="word-item word-leader" id="word-leader">EXCELLENCE</span>
+    </div>
+
+    <!-- Part 2: Title Orange Box Reveal on Black Screen -->
+    <div class="black-screen-reveal-wrap" id="curtain-reveal-wrap">
+      <div class="curtain-role-title" id="curtain-role-title">Service Details</div>
+      <div class="curtain-orange-mask" id="curtain-orange-mask"></div>
+    </div>
+  </div>
+
+  <!-- Background 3D Wireframe Dodecahedron Canvas (Continuous Auto-Rotation ONLY — NO Mouse Tracking) -->
+  <canvas id="bg-canvas-3d"></canvas>
+
+  <!-- Vertical side label -->
+  <div class="sd-side-label">SERVICES</div>
+
+  <!-- Top Navigation -->
+  <nav class="sd-navbar">
+    <div class="sd-nav-left">
+      <button class="sd-back-btn" id="sd-back-btn" onclick="window.location.href='index.html#services'">
+        <div class="back-circle"><i class="fa-solid fa-arrow-left"></i></div>
+        <span>BACK</span>
+      </button>
+    </div>
+    <div class="sd-nav-logo">Umair<span style="color: var(--accent-orange);">.</span></div>
+    <div class="sd-nav-right">
+      <button class="sd-theme-toggle" id="sd-theme-toggle" aria-label="Toggle light/dark mode">
+        <i class="fa-solid fa-sun" id="sd-theme-icon"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Heading -->
+  <div class="sd-hero">
+    <h1 class="sd-service-big-title" id="sd-service-title">
+      <!-- Populated by JS -->
+    </h1>
+
+    <button class="sd-about-btn" id="sd-about-btn">
+      <span class="btn-label">ABOUT SERVICE</span>
+      <div class="circle-btn"><i class="fa-solid fa-arrow-down"></i></div>
+    </button>
+  </div>
+
+  <!-- Main 2-Column Content -->
+  <div class="sd-main-content" id="sd-main-content">
+
+    <!-- LEFT: Approach & Description -->
+    <div class="sd-left-col">
+      <h2 class="sd-approach-label" id="sd-approach-label">
+        <!-- Populated by JS -->
+      </h2>
+      <p class="sd-approach-desc" id="sd-approach-desc">
+        <!-- Populated by JS -->
+      </p>
+      <button class="sd-view-works-btn" onclick="window.location.href='index.html#work'">
+        <span class="btn-label">VIEW WORKS</span>
+        <div class="circle-btn"><i class="fa-solid fa-arrow-right"></i></div>
+      </button>
+    </div>
+
+    <!-- RIGHT: Accordion Sub-services -->
+    <div class="sd-accordion" id="sd-accordion">
+      <!-- Populated by JS -->
+    </div>
+
+  </div>
+
+  <script>
+    /* ============================================================
+       SERVICE DATA — 8 Services (Graphics Designer + IT Expert)
+    ============================================================ */
+    const services = {
+      1: {
+        title: '<strong>Branding</strong> and<br><span class="font-light">Identity Design</span>',
+        approach: '<strong>Your</strong> Brand Identity<br><span class="font-light">and Visual Strategy</span>',
+        desc: 'Every great brand starts with a clear visual identity. I craft cohesive brand systems — from logos and color palettes to typography and brand guidelines — that communicate your values with precision and consistency across all touchpoints.',
+        items: [
+          {
+            title: 'LOGO DESIGN & SYMBOLS',
+            body: `<p>A logo is the cornerstone of your brand. I design unique, scalable logo marks and wordmarks that capture your brand's essence — from concept sketches to final vector formats (AI, EPS, SVG, PNG).</p>
+                   <p>Each logo is delivered with variations: primary, horizontal, stacked, and icon-only formats for digital and print use.</p>`
+          },
+          {
+            title: 'BRAND STYLE GUIDELINES',
+            body: `<p>A comprehensive brand manual that defines how your identity is used: color codes (CMYK, RGB, HEX), font hierarchy, logo clear space rules, tone of voice, and usage dos and don'ts.</p>
+                   <p>Delivered as a polished PDF guide your team or printers can follow precisely.</p>`
+          },
+          {
+            title: 'VISUAL IDENTITY KITS',
+            body: `<p>Full brand kit including business cards, letterheads, envelopes, email signatures, social media profile assets, and branded stationery — all production-ready and consistent.</p>`
+          },
+          {
+            title: 'COLOR PALETTE & TYPOGRAPHY',
+            body: `<p>Strategic color selection and font pairing that reflects your brand personality — from bold and modern to refined and professional. Includes primary and secondary palettes with accessibility contrast checks.</p>`
+          }
+        ]
+      },
+      2: {
+        title: '<strong>Print Design</strong><br><span class="font-light">and Collateral</span>',
+        approach: '<strong>Your</strong> Print Vision<br><span class="font-light">and Production Quality</span>',
+        desc: 'Great print design is the bridge between your brand and the physical world. I design high-resolution, production-ready print materials — from flex banners to premium packaging — that look exceptional in print and command attention.',
+        items: [
+          {
+            title: 'BROCHURES & CATALOGS',
+            body: `<p>Multi-page company profiles, product catalogs, trifold brochures, and service booklets — designed with strong grid systems and print-safe bleeds and margins.</p>
+                   <p>Delivered in print-ready PDF/X format with CMYK color profiles and embedded fonts.</p>`
+          },
+          {
+            title: 'FLEX & LARGE FORMAT PRINT',
+            body: `<p>Eye-catching flex banners, rollup banners, hoardings, and outdoor signage designed at full bleed resolution optimised for large-format printers.</p>
+                   <p>Files delivered at 150–300 DPI in the exact dimensions your printer requires.</p>`
+          },
+          {
+            title: 'PACKAGING & LABELS',
+            body: `<p>Custom box dielines, product label design, sticker sheets, and packaging artwork — structured with precise fold marks and cut lines for accurate production results.</p>`
+          },
+          {
+            title: 'BUSINESS CARDS & STATIONERY',
+            body: `<p>Premium business card layouts (standard, folded, die-cut), letterheads, envelopes, and complete office stationery packs — all production-ready with printer specifications.</p>`
+          }
+        ]
+      },
+      3: {
+        title: '<strong>Social Media</strong><br><span class="font-light">Design & Marketing</span>',
+        approach: '<strong>Your</strong> Digital Presence<br><span class="font-light">and Campaign Impact</span>',
+        desc: 'In a crowded digital space, visual consistency and engagement are everything. I design high-converting social media posts, promotional campaign graphics, and branded templates that elevate your online presence.',
+        items: [
+          {
+            title: 'POSTS & STORY TEMPLATES',
+            body: `<p>Consistent post templates, story designs, highlight covers, and profile art for Instagram, Facebook, LinkedIn, and YouTube — branded to your identity and optimised for each platform's dimensions.</p>`
+          },
+          {
+            title: 'PROMOTIONAL CAMPAIGN ARTWORK',
+            body: `<p>High-converting social media promotional post grid and banners for sales campaigns, restaurant offers, events, and brand launches.</p>`
+          },
+          {
+            title: 'DIGITAL BANNERS & AD KITS',
+            body: `<p>High-converting digital ad sets for Google Display, Facebook/Instagram Ads, and web banner campaigns — designed in all standard IAB sizes with strong visual hierarchy and clear CTAs.</p>`
+          },
+          {
+            title: 'CONTENT & THUMBNAIL DESIGN',
+            body: `<p>Custom YouTube thumbnail templates, blog header graphics, email newsletter layouts, and promotional creatives that maintain visual consistency across your digital content strategy.</p>`
+          }
+        ]
+      },
+      4: {
+        title: '<strong>UI / UX</strong><br><span class="font-light">Interface Design</span>',
+        approach: '<strong>Your</strong> Product Layout<br><span class="font-light">and User Experience</span>',
+        desc: 'Intuitive visual interfaces for websites and mobile applications. I design clean wireframes, high-fidelity mockups, and interactive Figma prototypes focused on user flows and modern UI aesthetics.',
+        items: [
+          {
+            title: 'UI / UX WIREFRAMING',
+            body: `<p>Website and app wireframes, low and high-fidelity mockups, and clickable prototypes in Figma — focused on intuitive user flows and clean visual hierarchy.</p>
+                   <p>Includes desktop, tablet, and mobile responsive layouts with annotated handoff files for developers.</p>`
+          },
+          {
+            title: 'FIGMA PROTOTYPING',
+            body: `<p>Interactive prototypes with component variants, micro-interactions, and smooth transitions ready for user testing and developer handoff.</p>`
+          },
+          {
+            title: 'APP & WEB INTERFACES',
+            body: `<p>Clean, sleek visual interfaces designed for iOS, Android, and Web platforms following modern design systems.</p>`
+          }
+        ]
+      },
+      5: {
+        title: '<strong>IT Services</strong> &<br><span class="font-light">Infrastructure Setup</span>',
+        approach: '<strong>Your</strong> IT Systems<br><span class="font-light">and Infrastructure Management</span>',
+        desc: 'With years of hands-on experience managing institutional IT infrastructure, I provide reliable technical setups, network configuration, and systems management that keep organizations running efficiently.',
+        items: [
+          {
+            title: 'NETWORK & HARDWARE SETUP',
+            body: `<p>Complete campus or office network setup — routers, switches, access points, CCTV systems, and structured cabling — configured for performance, security, and reliability.</p>
+                   <p>Includes network documentation and user account management (Active Directory, local networks).</p>`
+          },
+          {
+            title: 'INSTITUTIONAL IT SYSTEMS',
+            body: `<p>Campus software deployment, student database configuration, result generation workflows, and server administration.</p>`
+          },
+          {
+            title: 'SOFTWARE & SECURITY SETUP',
+            body: `<p>Windows installation, software licensing, system optimization, antivirus setup, and data protection protocols.</p>`
+          }
+        ]
+      },
+      6: {
+        title: '<strong>Web Development</strong><br><span class="font-light">and Launch</span>',
+        approach: '<strong>Your</strong> Online Presence<br><span class="font-light">and Digital Platform</span>',
+        desc: 'Fast, responsive, and beautifully animated websites designed for maximum impact. From personal portfolio sites to landing pages and corporate business websites.',
+        items: [
+          {
+            title: 'RESPONSIVE LANDING PAGES',
+            body: `<p>High-converting, mobile-friendly landing pages built with modern HTML5, CSS3, and GSAP animations for smooth user engagement.</p>`
+          },
+          {
+            title: 'PORTFOLIO & BUSINESS SITES',
+            body: `<p>Custom showcase websites built to highlight your work, services, and client testimonials with interactive visual elements.</p>`
+          },
+          {
+            title: 'CMS & WEB INTEGRATION',
+            body: `<p>WordPress setup, CMS customization, domain/hosting configuration, and website maintenance.</p>`
+          }
+        ]
+      },
+      7: {
+        title: '<strong>MS Office Expertise</strong><br><span class="font-light">&amp; Automation</span>',
+        approach: '<strong>Your</strong> Office Data<br><span class="font-light">and Automated Workflows</span>',
+        desc: 'Transforming manual administrative work into automated, error-free spreadsheets and reporting systems using advanced MS Excel formulas and structured data templates.',
+        items: [
+          {
+            title: 'EXCEL ADVANCED FORMULAS',
+            body: `<p>Custom MS Excel workbooks with advanced formulas (VLOOKUP, INDEX/MATCH, IF nesting, SUMIFS), PivotTables, conditional formatting, and interactive data dashboards.</p>`
+          },
+          {
+            title: 'FEE VOUCHERS & SALARY SHEETS',
+            body: `<p>Automated student fee voucher generation, monthly salary sheets, payroll calculations, and financial invoice templates designed for easy printing and record keeping.</p>`
+          },
+          {
+            title: 'DATA MANAGEMENT SYSTEMS',
+            body: `<p>Structured database records, attendance tracking systems, academic result compilations, and administrative Excel tools designed for non-technical office staff.</p>`
+          }
+        ]
+      },
+      8: {
+        title: '<strong>Tech Support</strong><br><span class="font-light">&amp; Maintenance</span>',
+        approach: '<strong>Your</strong> IT Reliability<br><span class="font-light">and Continuous Troubleshooting</span>',
+        desc: 'Prompt technical support, system maintenance, and data backup solutions to ensure zero downtime for your computers and IT hardware.',
+        items: [
+          {
+            title: 'SYSTEM TROUBLESHOOTING',
+            body: `<p>Diagnosing and fixing hardware failures, operating system crashes, driver conflicts, and performance bottlenecks for desktop and laptop computers.</p>`
+          },
+          {
+            title: 'DATA BACKUP & RECOVERY',
+            body: `<p>Automated local and cloud backup strategies, accidental file recovery, system restore points, and secure data migration.</p>`
+          },
+          {
+            title: 'CONTINUOUS TECH SUPPORT',
+            body: `<p>Ongoing technical consultation, regular system health checks, software updates, and remote/on-site troubleshooting support.</p>`
+          }
+        ]
+      }
+    };
+
+    /* ============================================================
+       INIT — Read URL ?service=N and populate page
+    ============================================================ */
+    const params = new URLSearchParams(window.location.search);
+    const serviceId = parseInt(params.get('service')) || 1;
+    const data = services[serviceId] || services[1];
+
+    // Set big heading
+    document.getElementById('sd-service-title').innerHTML = data.title;
+
+    // Set approach text
+    document.getElementById('sd-approach-label').innerHTML = data.approach;
+    document.getElementById('sd-approach-desc').textContent = data.desc;
+
+    // Build accordion
+    const accordion = document.getElementById('sd-accordion');
+    data.items.forEach((item, i) => {
+      const el = document.createElement('div');
+      el.className = 'sd-accordion-item';
+      el.innerHTML = `
+        <div class="sd-accordion-header" role="button" tabindex="0" aria-expanded="false">
+          <span class="acc-title">${item.title}</span>
+          <div class="acc-toggle-btn" aria-hidden="true">+</div>
+        </div>
+        <div class="sd-accordion-body">
+          ${item.body}
+        </div>`;
+      accordion.appendChild(el);
+
+      const header = el.querySelector('.sd-accordion-header');
+      const toggleBtn = el.querySelector('.acc-toggle-btn');
+
+      header.addEventListener('click', () => {
+        const isOpen = el.classList.contains('active');
+
+        // Close all
+        document.querySelectorAll('.sd-accordion-item.active').forEach(open => {
+          open.classList.remove('active');
+          open.querySelector('.acc-toggle-btn').textContent = '+';
+          open.querySelector('.sd-accordion-header').setAttribute('aria-expanded', 'false');
+        });
+
+        // Open clicked (if it was closed)
+        if (!isOpen) {
+          el.classList.add('active');
+          toggleBtn.textContent = '−';
+          header.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      header.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); header.click(); }
+      });
+    });
+
+    /* ============================================================
+       ABOUT SERVICE ↓ Scroll Button
+    ============================================================ */
+    document.getElementById('sd-about-btn').addEventListener('click', () => {
+      document.getElementById('sd-main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    /* ============================================================
+       THEME TOGGLE — Sync with portfolio
+    ============================================================ */
+    const themeToggle = document.getElementById('sd-theme-toggle');
+    const themeIcon = document.getElementById('sd-theme-icon');
+
+    // Load saved preference
+    if (localStorage.getItem('umair-theme') === 'light') {
+      document.body.classList.add('light-mode');
+      themeIcon.className = 'fa-solid fa-moon';
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      themeIcon.className = isLight ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+      localStorage.setItem('umair-theme', isLight ? 'light' : 'dark');
+    });
+
+    /* ============================================================
+       BACKGROUND 3D WIREFRAME DODECAHEDRON CANVAS
+       (Continuous Auto-Rotation ONLY — NO Mouse Tracking)
+    ============================================================ */
+    (function() {
+      const canvas = document.getElementById('bg-canvas-3d');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let width, height;
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // 3D Dodecahedron Vertices & Edges
+      const phi = (1 + Math.sqrt(5)) / 2;
+      const b = 1 / phi;
+      const vertices = [
+        [-1,-1,-1],[1,-1,-1],[-1,1,-1],[1,1,-1],
+        [-1,-1,1],[1,-1,1],[-1,1,1],[1,1,1],
+        [0,-phi,-b],[0,phi,-b],[0,-phi,b],[0,phi,b],
+        [-b,-phi,0],[b,-phi,0],[-b,phi,0],[b,phi,0],
+        [-phi,0,-b],[phi,0,-b],[-phi,0,b],[phi,0,b]
+      ];
+
+      const edges = [
+        [0,8],[8,1],[1,17],[17,9],[9,0],
+        [4,10],[10,5],[5,19],[19,11],[11,4],
+        [3,14],[14,2],[2,15],[15,3],
+        [7,11],[11,6],[6,15],[15,7],
+        [0,16],[16,3],[1,17],[2,17],
+        [4,18],[18,7],[5,19],[6,19],
+        [8,9],[10,11],[12,13],[14,15],[16,18],[17,19],
+        [0,12],[12,1],[4,12],[5,13],[13,1],
+        [3,14],[7,14],[2,15],[6,15]
+      ];
+
+      let angleX = 0, angleY = 0, angleZ = 0;
+
+      function draw3DWireframe() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Smooth continuous multi-axis rotation (NO mouse tracking)
+        angleX += 0.003;
+        angleY += 0.005;
+        angleZ += 0.002;
+
+        const baseRadius = Math.min(width, height) * 0.36;
+        const centerX = width * 0.76;
+        const centerY = height * 0.45;
+
+        const projected = vertices.map(v => {
+          let y1 = v[1] * Math.cos(angleX) - v[2] * Math.sin(angleX);
+          let z1 = v[1] * Math.sin(angleX) + v[2] * Math.cos(angleX);
+          let x1 = v[0];
+
+          let x2 = x1 * Math.cos(angleY) + z1 * Math.sin(angleY);
+          let z2 = -x1 * Math.sin(angleY) + z1 * Math.cos(angleY);
+          let y2 = y1;
+
+          let x3 = x2 * Math.cos(angleZ) - y2 * Math.sin(angleZ);
+          let y3 = x2 * Math.sin(angleZ) + y2 * Math.cos(angleZ);
+          let z3 = z2;
+
+          const fov = 400;
+          const scale = fov / (fov + z3 * 100);
+          return [
+            centerX + x3 * baseRadius * scale,
+            centerY + y3 * baseRadius * scale
+          ];
+        });
+
+        const isDark = document.body.classList.contains('dark-mode');
+        ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.22)' : 'rgba(0, 0, 0, 0.15)';
+        ctx.lineWidth = 1.4;
+
+        edges.forEach(edge => {
+          const p1 = projected[edge[0]];
+          const p2 = projected[edge[1]];
+          if (p1 && p2) {
+            ctx.beginPath();
+            ctx.moveTo(p1[0], p1[1]);
+            ctx.lineTo(p2[0], p2[1]);
+            ctx.stroke();
+          }
+        });
+
+        requestAnimationFrame(draw3DWireframe);
+      }
+      requestAnimationFrame(draw3DWireframe);
+    })();
+
+    /* ============================================================
+       INTRO SEQUENCE ON SOLID BLACK CURTAIN SCREEN
+       Sequence: Part 1: Three Words -> Part 2: Orange Box Reveal -> Lift Curtain
+    ============================================================ */
+    window.addEventListener('load', () => {
+      const curtain     = document.getElementById('intro-curtain');
+      const wordsWrap   = document.getElementById('intro-words-wrap');
+      const wDesigner   = document.getElementById('word-designer');
+      const wCreator    = document.getElementById('word-creator');
+      const wLeader     = document.getElementById('word-leader');
+      const revealWrap  = document.getElementById('curtain-reveal-wrap');
+      const curtainRole = document.getElementById('curtain-role-title');
+      const orangeMask  = document.getElementById('curtain-orange-mask');
+
+      // Populate curtain role title plain text
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = data.title;
+      if (curtainRole) curtainRole.textContent = tempDiv.textContent || tempDiv.innerText;
+
+      const masterTL = gsap.timeline();
+
+      // PART 1: Three Words on Solid Black Screen (All White)
+      masterTL
+        .to(wDesigner, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' })
+        .to(wCreator,  { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.22')
+        .to(wLeader,   { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.22')
+        .to(wordsWrap, { opacity: 0, y: -20, duration: 0.35, ease: 'power2.in', delay: 0.3 })
+
+        // PART 2: Orange Box Text Reveal Animation on Solid Black Screen
+        .call(() => {
+          wordsWrap.style.display = 'none';
+          revealWrap.style.opacity = '1';
+          gsap.set(curtainRole, { opacity: 1 });
+        })
+        .fromTo(orangeMask,
+          { scaleX: 0, opacity: 1 },
+          { scaleX: 1, duration: 0.45, ease: 'power3.inOut' }
+        )
+        .to(orangeMask, {
+          scaleX: 0,
+          transformOrigin: 'right center',
+          duration: 0.55,
+          ease: 'power3.inOut'
+        })
+        .to(orangeMask, { opacity: 0, duration: 0.1 }, '+=0.2')
+
+        // PART 3: Curtain Lifts / Fades Out to reveal Service Details page
+        .to(curtain, {
+          yPercent: -100,
+          duration: 0.75,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            curtain.style.display = 'none';
+          }
+        })
+
+        // Reveal page content
+        .from('.sd-hero', { opacity: 0, y: 30, duration: 0.8, ease: 'power3.out' }, '-=0.3')
+        .from('.sd-left-col', { opacity: 0, y: 30, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+        .from('.sd-accordion-item', { opacity: 0, y: 20, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, '-=0.5');
+    });
+  </script>
+
+</body>
+</html>

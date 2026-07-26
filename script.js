@@ -6,6 +6,49 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ========================================================================
+     LENIS ULTRA-SMOOTH INERTIAL MOMENTUM SCROLL
+     ======================================================================== */
+  let lenis = null;
+  if (typeof Lenis !== 'undefined') {
+    lenis = new Lenis({
+      duration: 1.6,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 0.82,
+      touchMultiplier: 1.4,
+      infinite: false,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    // Intercept internal anchor links for smooth momentum scroll navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const targetId = anchor.getAttribute('href');
+        if (targetId && targetId !== '#') {
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            lenis.scrollTo(targetEl, {
+              offset: -30,
+              duration: 1.4,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+          }
+        }
+      });
+    });
+  }
+
+  /* ========================================================================
      GSAP SETUP
      ======================================================================== */
   gsap.registerPlugin(ScrollTrigger);
@@ -164,22 +207,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+  }); // end revealSections.forEach
 
-    const sectionNum = section.querySelector('.section-number');
-    if (sectionNum) {
-      gsap.from(sectionNum, {
-        opacity: 0,
-        x: -20,
-        duration: 0.6,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: sectionNum,
-          start:   'top 90%',
-          toggleActions: 'play none none none'
-        }
-      });
+  /* ========================================================================
+     CUSTOM "MORE" HOVER CURSOR & OUR SERVICES SCROLL BUTTON
+     ======================================================================== */
+  const moreCursor = document.getElementById('more-cursor');
+  const serviceCards = document.querySelectorAll('[data-more-cursor="true"]');
+
+  if (moreCursor) {
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function updateCursorPos() {
+      cursorX += (mouseX - cursorX) * 0.25;
+      cursorY += (mouseY - cursorY) * 0.25;
+      moreCursor.style.left = `${cursorX}px`;
+      moreCursor.style.top = `${cursorY}px`;
+      requestAnimationFrame(updateCursorPos);
     }
-  });
+    requestAnimationFrame(updateCursorPos);
+
+    serviceCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        moreCursor.classList.add('active');
+      });
+      card.addEventListener('mouseleave', () => {
+        moreCursor.classList.remove('active');
+      });
+    });
+  }
+
+  // OUR SERVICES ↓ Scroll Button
+  const ourServicesBtn = document.getElementById('our-services-scroll-btn');
+  if (ourServicesBtn) {
+    ourServicesBtn.addEventListener('click', () => {
+      const grid = document.getElementById('services-grid');
+      if (grid) {
+        if (typeof lenis !== 'undefined' && lenis) {
+          lenis.scrollTo(grid, { offset: -60, duration: 1.2 });
+        } else {
+          grid.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  }
 
   /* ========================================================================
      5. STAGGER GRID CARDS (Services, Work)
@@ -207,6 +284,180 @@ document.addEventListener('DOMContentLoaded', () => {
         trigger: container,
         start:   'top 80%',
         toggleActions: 'play none none none'
+      }
+    });
+  });
+
+  /* ========================================================================
+     5aa. "SEE WHAT I'VE BUILT" BUTTON — Scroll to Timeline
+     ======================================================================== */
+  const seeBuiltBtn = document.getElementById('see-built-btn');
+  if (seeBuiltBtn) {
+    const timeline = document.getElementById('journey-timeline');
+    let isTimelineOpen = false;
+
+    seeBuiltBtn.addEventListener('click', () => {
+      if (!timeline) return;
+
+      if (!isTimelineOpen) {
+        // REVEAL — show the timeline with smooth slide-down + fade
+        isTimelineOpen = true;
+        timeline.style.display = 'block';
+        gsap.fromTo(timeline,
+          { opacity: 0, y: -30, height: 0 },
+          { opacity: 1, y: 0, height: 'auto', duration: 0.9, ease: 'power3.out',
+            onComplete: () => {
+              // Scroll to it after reveal
+              if (lenis) {
+                lenis.scrollTo(timeline, { offset: -80, duration: 1.2 });
+              } else {
+                timeline.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+              // Animate center line
+              const cLine = timeline.querySelector('.timeline-center-line');
+              if (cLine) gsap.to(cLine, { scaleY: 1, duration: 2, ease: 'power2.out' });
+              // Stagger-animate each card left/right
+              const items = timeline.querySelectorAll('.journey-item');
+              items.forEach((item, i) => {
+                const isRight = item.classList.contains('step-right');
+                gsap.fromTo(item,
+                  { opacity: 0, x: isRight ? 70 : -70, y: 20 },
+                  { opacity: 1, x: 0, y: 0, duration: 0.75, ease: 'power3.out', delay: i * 0.1 }
+                );
+              });
+            }
+          }
+        );
+        // Update button
+        seeBuiltBtn.querySelector('span').textContent = "Hide Journey";
+        seeBuiltBtn.querySelector('.circle-arrow i').className = 'fa-solid fa-arrow-up';
+        seeBuiltBtn.style.background = 'linear-gradient(135deg, #444 0%, #222 100%)';
+
+      } else {
+        // HIDE — collapse the timeline smoothly
+        isTimelineOpen = false;
+        gsap.to(timeline, {
+          opacity: 0, y: -20, height: 0, duration: 0.6, ease: 'power2.in',
+          onComplete: () => { timeline.style.display = 'none'; }
+        });
+        // Restore button
+        seeBuiltBtn.querySelector('span').textContent = "See What I've Built";
+        seeBuiltBtn.querySelector('.circle-arrow i').className = 'fa-solid fa-arrow-down';
+        seeBuiltBtn.style.background = '';
+      }
+    });
+  }
+
+  /* ========================================================================
+     5ab. TIMELINE ITEMS — GSAP Scroll Reveal Animations (Alternating)
+     ======================================================================== */
+  // Center line starts scaled down — animated on button click (see handler above)
+  const centerLine = document.querySelector('.timeline-center-line');
+  if (centerLine) {
+    gsap.set(centerLine, { scaleY: 0, transformOrigin: 'top center' });
+  }
+
+  /* ========================================================================
+     5a. DRAG TO VIEW DETAILS SLIDER (Experience Cards)
+     ======================================================================== */
+  document.querySelectorAll('.drag-to-unlock-wrapper').forEach(wrapper => {
+    const knob = wrapper.querySelector('.drag-slider-knob');
+    const progressBar = wrapper.querySelector('.drag-progress-bar');
+    const targetHref = wrapper.getAttribute('data-href');
+    if (!knob || !progressBar || !targetHref) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    let maxX = 0;
+    let isUnlocked = false;
+
+    function calcMaxX() {
+      const wrapperWidth = wrapper.offsetWidth;
+      const knobWidth = knob.offsetWidth;
+      return wrapperWidth - knobWidth - 6; // 3px padding offset
+    }
+
+    // Touch & Mouse Event Handlers
+    function onStart(e) {
+      if (isUnlocked) return;
+      isDragging = true;
+      wrapper.classList.add('is-dragging');
+      startX = (e.pageX || (e.touches && e.touches[0] ? e.touches[0].pageX : 0)) - currentX;
+      maxX = calcMaxX();
+    }
+
+    function onMove(e) {
+      if (!isDragging || isUnlocked) return;
+      const pageX = e.pageX || (e.touches && e.touches[0] ? e.touches[0].pageX : 0);
+      const diffX = pageX - startX;
+      currentX = Math.min(maxX, Math.max(0, diffX));
+
+      knob.style.transform = `translateX(${currentX}px)`;
+      progressBar.style.width = `${currentX + 36}px`;
+
+      // Check if dragged past 75% -> Unlock!
+      if (currentX >= maxX * 0.75) {
+        triggerUnlock();
+      }
+    }
+
+    function onEnd() {
+      if (!isDragging || isUnlocked) return;
+      isDragging = false;
+      wrapper.classList.remove('is-dragging');
+
+      if (currentX < maxX * 0.75) {
+        // Reset back to start smoothly with spring curve
+        currentX = 0;
+        knob.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        progressBar.style.transition = 'width 0.3s ease';
+        knob.style.transform = 'translateX(0px)';
+        progressBar.style.width = '0px';
+
+        setTimeout(() => {
+          knob.style.transition = '';
+          progressBar.style.transition = '';
+        }, 300);
+      }
+    }
+
+    function triggerUnlock() {
+      if (isUnlocked) return;
+      isUnlocked = true;
+      isDragging = false;
+      wrapper.classList.remove('is-dragging');
+
+      maxX = calcMaxX();
+      knob.style.transition = 'transform 0.2s ease-out';
+      progressBar.style.transition = 'width 0.2s ease-out';
+      knob.style.transform = `translateX(${maxX}px)`;
+      progressBar.style.width = '100%';
+
+      // Change icon to green checkmark
+      knob.innerHTML = '<i class="fa-solid fa-check"></i>';
+      knob.style.background = 'linear-gradient(135deg, #00c853 0%, #009624 100%)';
+
+      // Navigate to experience detail page after short delay
+      setTimeout(() => {
+        window.location.href = targetHref;
+      }, 250);
+    }
+
+    // Event Listeners for Mouse & Touch
+    knob.addEventListener('mousedown', onStart);
+    knob.addEventListener('touchstart', onStart, { passive: true });
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: true });
+
+    window.addEventListener('mouseup', onEnd);
+    window.addEventListener('touchend', onEnd);
+
+    // Fallback: Clicking anywhere on wrapper slides to end automatically
+    wrapper.addEventListener('click', (e) => {
+      if (currentX === 0 && !isUnlocked) {
+        triggerUnlock();
       }
     });
   });
@@ -392,23 +643,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ========================================================================
-     6. EXPERIENCE TIMELINE - Slide In Left/Right Alternating
+     6. PARALLAX setup (timeline items animation already handled above in 5ab)
      ======================================================================== */
-  const timelineItems = document.querySelectorAll('.timeline-item');
-  timelineItems.forEach((item, i) => {
-    const dir = i % 2 === 0 ? -60 : 60;
-    gsap.from(item, {
-      opacity: 0,
-      x: dir,
-      duration: 0.9,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: item,
-        start:   'top 85%',
-        toggleActions: 'play none none none'
-      }
-    });
-  });
 
   /* ========================================================================
      7. PARALLAX HERO PHOTO ON SCROLL
